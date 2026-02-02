@@ -23,16 +23,24 @@ public class User {
     public String lastname;
     @Column(name="user_created_at",nullable = false)
     public LocalDateTime createdAt;
+    @Column(name = "user_password",nullable = false)
+    public String password;
+    @Column(name = "user_gender",length = 9)
+    public String gender;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     public List<Link> links;
 
     public User(){}
-    public User(UUID id, String email, String name, String lastname, LocalDateTime createdAt, List<Link> links) {
+
+    public User(UUID id, String email, String name, String lastname, LocalDateTime createdAt, String password, String gender, List<Link> links) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.lastname = lastname;
         this.createdAt = createdAt;
+        this.password = password;
+        this.gender = gender;
         this.links = links;
     }
 
@@ -40,12 +48,12 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getName(), user.getName()) && Objects.equals(getLastname(), user.getLastname()) && Objects.equals(getCreatedAt(), user.getCreatedAt()) && Objects.equals(getLinks(), user.getLinks());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getName(), user.getName()) && Objects.equals(getLastname(), user.getLastname()) && Objects.equals(getCreatedAt(), user.getCreatedAt()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getGender(), user.getGender()) && Objects.equals(getLinks(), user.getLinks());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getName(), getLastname(), getCreatedAt(), getLinks());
+        return Objects.hash(getId(), getEmail(), getName(), getLastname(), getCreatedAt(), getPassword(), getGender(), getLinks());
     }
 
     public UUID getId() {
@@ -88,6 +96,22 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public List<Link> getLinks() {
         return links;
     }
@@ -95,6 +119,4 @@ public class User {
     public void setLinks(List<Link> links) {
         this.links = links;
     }
-
-
 }
