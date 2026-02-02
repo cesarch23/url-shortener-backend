@@ -1,11 +1,6 @@
 package shorty.com.urlshortener.DTO;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
 import shorty.com.urlshortener.entity.Link;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,17 +9,11 @@ public class UserDto {
     public String email;
     public String name;
     public String lastname;
+    public String gender;
     public List<Link> links;
 
     UserDto(){}
 
-    public UserDto(UUID userId, String email, String name, String lastname, List<Link> links) {
-        this.userId = userId;
-        this.email = email;
-        this.name = name;
-        this.lastname = lastname;
-        this.links = links;
-    }
 
     public UUID getUserId() {
         return userId;
@@ -56,6 +45,14 @@ public class UserDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public List<Link> getLinks() {
