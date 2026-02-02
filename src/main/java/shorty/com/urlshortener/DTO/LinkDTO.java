@@ -1,7 +1,4 @@
 package shorty.com.urlshortener.DTO;
-
-import jakarta.persistence.Column;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
