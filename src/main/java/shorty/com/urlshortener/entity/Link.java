@@ -1,106 +1,47 @@
 package shorty.com.urlshortener.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+
 
 @Entity
-@Table(name = "links")
+@Table(
+        name = "links",
+        indexes = {
+                @Index(name = "idx_expired_date", columnList = "link_expire_at"),
+                @Index(name = "idx_user_id",columnList = "user_id")
+        },
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_user_id_original_url",columnNames = {"user_id","link_original_url"})
+        }
+)
+@Getter
+@Setter
 public class Link {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "link_id",unique = true)
-    public UUID id;
+    @Column(name = "link_short_code",length =11,nullable = false)//indexado auto
+    private String code;
     @Column(name = "link_original_url",length = 2000,nullable = false)
-    public String originalUrl;
-    @Column(name = "link_short_code",length = 6,nullable = false)
-    public String code;
+    private String originalUrl;
     @Column(name = "link_created_at",nullable = false)
-    public LocalDateTime createdAt; //YYYY-MM-DD HH:MI:SS
+    private LocalDateTime createdAt; //YYYY-MM-DD HH:MI:SS
     @Column(name = "link_expire_at",nullable = false)
-    public LocalDateTime expiredAt;
-    @Column(name="user_id",nullable=false)
+    private LocalDateTime expiredAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name="user_id",
             referencedColumnName = "user_id",
             nullable = false,
             foreignKey = @ForeignKey(name = "fk_link_user"),
-            insertable = false,
+            insertable = true,//testear en false para ambos
             updatable = false
     )
-    public User user;
+    private User user;
 
     public Link (){}
 
-    public Link(UUID id, String originalUrl, String code, LocalDateTime createdAt, LocalDateTime expiredAt, User user) {
-        this.id = id;
-        this.originalUrl = originalUrl;
-        this.code = code;
-        this.createdAt = createdAt;
-        this.expiredAt = expiredAt;
-        this.user = user;
-    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Link link)) return false;
-        return Objects.equals(id, link.id) && Objects.equals(originalUrl, link.originalUrl) && Objects.equals(code, link.code) && Objects.equals(createdAt, link.createdAt) && Objects.equals(expiredAt, link.expiredAt) && Objects.equals(user, link.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, originalUrl, code, createdAt, expiredAt, user);
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getOriginalUrl() {
-        return originalUrl;
-    }
-
-    public void setOriginalUrl(String originalUrl) {
-        this.originalUrl = originalUrl;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiredAt() {
-        return expiredAt;
-    }
-
-    public void setExpiredAt(LocalDateTime expiredAt) {
-        this.expiredAt = expiredAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

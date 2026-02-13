@@ -9,7 +9,6 @@ public class UserDto {
     public String email;
     public String name;
     public String lastname;
-    public String gender;
     public List<Link> links;
 
     UserDto(){}
@@ -45,14 +44,6 @@ public class UserDto {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public List<Link> getLinks() {

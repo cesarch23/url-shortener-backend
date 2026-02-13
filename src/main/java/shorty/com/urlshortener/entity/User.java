@@ -2,121 +2,55 @@ package shorty.com.urlshortener.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import shorty.com.urlshortener.enums.AuthProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "users")
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.UUID)
-    public UUID id;
+    private UUID id;
     @Column(name = "user_email",nullable=false,unique = true,length = 254)
-    public String email;
+    private String email;
+    @Column(name = "user_email_verified",nullable = false)
+    private Boolean emailVerified;
     @Column(name="user_name", nullable=false,length=50)
-    public String name;
-    @Column(name="user_lastname", nullable = false, length = 60)
-    public String lastname;
+    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_auth_provider",nullable = false)
+    private AuthProvider authProvider;
+    @Column(name="user_provider_id",nullable = true)
+    private String providerId;
+
+    @Column(name = "user_role",nullable = false,length = 12)
+    private String role;
+
+    @Column(name="user_lastname", nullable = true, length = 60)
+    private String lastname;
     @Column(name="user_created_at",nullable = false)
-    public LocalDateTime createdAt;
-    @Column(name = "user_password",nullable = false)
-    public String password;
-    @Column(name = "user_gender",length = 9)
-    public String gender;
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    public List<Link> links;
+    private List<Link> links;
+
+    @PrePersist()
+    protected  void onCreate(){
+        createdAt = LocalDateTime.now();
+    }
 
     public User(){}
 
-    public User(UUID id, String email, String name, String lastname, LocalDateTime createdAt, String password, String gender, List<Link> links) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.lastname = lastname;
-        this.createdAt = createdAt;
-        this.password = password;
-        this.gender = gender;
-        this.links = links;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getName(), user.getName()) && Objects.equals(getLastname(), user.getLastname()) && Objects.equals(getCreatedAt(), user.getCreatedAt()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getGender(), user.getGender()) && Objects.equals(getLinks(), user.getLinks());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getEmail(), getName(), getLastname(), getCreatedAt(), getPassword(), getGender(), getLinks());
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public List<Link> getLinks() {
-        return links;
-    }
-
-    public void setLinks(List<Link> links) {
-        this.links = links;
-    }
 }
