@@ -2,6 +2,9 @@ package shorty.com.urlshortener.serviceImpls;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import shorty.com.urlshortener.DTO.LinkDTO;
 import shorty.com.urlshortener.DTO.LongUrlResponse;
@@ -71,10 +74,23 @@ public class ShortenerServiceImpl implements ShortenerService {
         return null;
     }
 
-
     //todo obtener original url en base al code
 
+
     //Todo obtner todas las urls de un cliente;
+    public Page<LinkDTO> getLinksByUserId(UUID userId,int page, int size){
+        Pageable pageable = PageRequest.of(page,size);
+        return linkRepository.findAllByUserId(userId,pageable)
+                .map(link->
+                        LinkDTO.builder()
+                                .shortCode(link.getCode())
+                                .longUrl(link.getOriginalUrl())
+                                .createdDate(link.getCreatedAt())
+                                .expiredDate(link.getExpiredAt())
+                                .build()
+                );
+    }
+
 
     public String generateShortCode(ShortUrlRequest shortUrlRequest, int shortCodeLength ) throws NoSuchAlgorithmException{
         try {
@@ -104,13 +120,5 @@ public class ShortenerServiceImpl implements ShortenerService {
          }
          return result.toString();
     }
-    public void main() throws NoSuchAlgorithmException {
-        UUID userId  = UUID.randomUUID();
-        String originalUrl = "https://www.google.com";
 
-        ShortUrlRequest s = new ShortUrlRequest(originalUrl,userId,LocalDateTime.now());
-
-        String code = this.generateShortCode(s,8);
-        System.out.println("Código corto: " + code);
-    }
 }
