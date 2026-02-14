@@ -75,10 +75,18 @@ public class ShortenerServiceImpl implements ShortenerService {
         return null;
     }
 
-    //todo obtener original url en base al code
     public LongUrlResponse getLongUrl(String shortCode){
-        Optional<Link> link = this.linkRepository.findByCode(shortCode);
-        return link.map(value -> new LongUrlResponse(value.getOriginalUrl())).orElse(null);
+
+        Optional<Link> optionalLink = linkRepository.findByCode(shortCode);
+        if (optionalLink.isEmpty()) {
+            return null;
+        }
+        Link link = optionalLink.get();
+        LocalDateTime now = LocalDateTime.now();
+        if (link.getExpiredAt().isBefore(now)) {
+            return null;
+        }
+        return new LongUrlResponse(link.getOriginalUrl());
     }
     public Page<LinkDTO> getLinksByUserId(UUID userId,int page, int size){
         Pageable pageable = PageRequest.of(page,size);

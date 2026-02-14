@@ -24,8 +24,10 @@ public class URLRedirectController {
         {
             LongUrlResponse response = this.shortenerService.getLongUrl(shortCode);
             if(Objects.isNull( response ) || Objects.isNull( response.LongUrl() ) ){
-                return ResponseEntity
-                        .notFound()
+                return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+                        .header("Location","http://localhost:4200/not-found")
+                        .header("Cache-Control","private, max-age=90")
+                        .header("X-Robots-Tag","noindex")
                         .build();
 
             }
@@ -36,8 +38,10 @@ public class URLRedirectController {
                     .header("X-Robots-Tag","noindex")
                     .build();
         }catch (Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
+                    .header("Location","http://localhost:4200/not-found")
+                    .header("Cache-Control","private, max-age=90")
+                    .header("X-Robots-Tag","noindex")
                     .build();
         }
     }
