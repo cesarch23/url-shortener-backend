@@ -31,7 +31,7 @@ public class ShortenerServiceImpl implements ShortenerService {
 
     private final String BASE62;
     private final String SECRET_KEY;
-    private LinkRepository linkRepository;
+    private final LinkRepository linkRepository;
     private final LinkMapper linkMapper;
 
     public ShortenerServiceImpl(
