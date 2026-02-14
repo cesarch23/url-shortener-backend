@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -75,9 +76,10 @@ public class ShortenerServiceImpl implements ShortenerService {
     }
 
     //todo obtener original url en base al code
-
-
-    //Todo obtner todas las urls de un cliente;
+    public LongUrlResponse getLongUrl(String shortCode){
+        Optional<Link> link = this.linkRepository.findByCode(shortCode);
+        return link.map(value -> new LongUrlResponse(value.getOriginalUrl())).orElse(null);
+    }
     public Page<LinkDTO> getLinksByUserId(UUID userId,int page, int size){
         Pageable pageable = PageRequest.of(page,size);
         return linkRepository.findAllByUserId(userId,pageable)

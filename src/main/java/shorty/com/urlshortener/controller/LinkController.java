@@ -2,7 +2,6 @@ package shorty.com.urlshortener.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shorty.com.urlshortener.DTO.LinkDTO;
@@ -12,7 +11,7 @@ import shorty.com.urlshortener.serviceImpls.ShortenerServiceImpl;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/users") //change from api/v1/links to api/v1/users/links
+@RequestMapping("api/v1/users")
 public class LinkController {
 
     private final ShortenerServiceImpl shortenerService;
@@ -33,7 +32,6 @@ public class LinkController {
             @RequestParam(defaultValue = "0") int size
             ){
         return new ResponseEntity<>(shortenerService.getLinksByUserId(id,page,size), HttpStatus.OK);
-
     }
 
 }

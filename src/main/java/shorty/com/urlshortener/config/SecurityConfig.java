@@ -89,8 +89,8 @@ public class SecurityConfig {
                         .permitAll()
 
                         // Rutas de autenticación (públicas)
-                        .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
-                        .requestMatchers("/api/v1/links/**").hasAnyRole("ADMIN","USER")
+                        .requestMatchers("/api/v1/auth/**", "/oauth2/**","/api/v1/links/**").permitAll()
+                        .requestMatchers("/api/v1/users/**").hasAnyRole("ADMIN","USER")
 
                         // Todas las demás rutas requieren autenticación
                         .anyRequest()

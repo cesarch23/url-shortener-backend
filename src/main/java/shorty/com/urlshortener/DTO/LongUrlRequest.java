@@ -1,4 +1,4 @@
 package shorty.com.urlshortener.DTO;
 
-public record LongUrlRequest(String shortUrl) {
+public record LongUrlRequest(String code) {
 }
